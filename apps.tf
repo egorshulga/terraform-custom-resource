@@ -16,6 +16,10 @@ resource "azurerm_linux_web_app" "appService1" {
   app_settings = {
     NORMAL_SETTING_1 = 42
   }
+
+  lifecycle {
+    ignore_changes = [app_settings["CALLEE"]]
+  }
 }
 
 resource "random_uuid" "appService2" {} # For unique name.
@@ -34,5 +38,9 @@ resource "azurerm_linux_web_app" "appService2" {
 
   app_settings = {
     NORMAL_SETTING_2 = 43
+  }
+  
+  lifecycle {
+    ignore_changes = [app_settings["CALLER"]]
   }
 }
