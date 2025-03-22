@@ -1,5 +1,5 @@
 This repo provides a code example for the blogpost
-[Terraform: Custom Resources (without Go)](blog.egorshulga.obl.ong/terraform-custom-resource).
+[Terraform: Custom Resources (without Go)](https://blog.egorshulga.obl.ong/terraform-custom-resource).
 
 To run the code:
 
