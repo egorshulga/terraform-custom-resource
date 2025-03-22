@@ -14,6 +14,30 @@ locals {
   ])
 }
 
+data "validation_warnings" "appSettingsAreNotInDesiredState" {
+  dynamic "warning" {
+    for_each = var.appSettings
+    iterator = each
+    content {
+      condition = !contains(keys(local.currentAppSettings), each.key)
+      summary   = "AppSetting ${each.key} is not present, so it will be added"
+    }
+  }
+
+  dynamic "warning" {
+    for_each = var.appSettings
+    iterator = each
+    content {
+      condition = (
+        contains(keys(local.currentAppSettings), each.key) ?
+        local.currentAppSettings[each.key] != each.value :
+        false
+      )
+      summary = "AppSetting ${each.key} does not have desired value, so it will be updated"
+    }
+  }
+}
+
 resource "value_replaced_when" "driftDetected" {
   condition = !local.areAppSettingsInDesiredState
 }
