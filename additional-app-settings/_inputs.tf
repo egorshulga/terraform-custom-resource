@@ -5,8 +5,10 @@ variable "subscriptionId" {
 
 variable "appService" {
   type = object({
-    name                = string
-    resource_group_name = string
+    # The property id is marked as 'known after apply' during initial creation.
+    # This avoids deadlocking the implemented custom refresh mechanism.
+    # We parse the id to retrieve name and resource group name.
+    id = string
   })
 }
 

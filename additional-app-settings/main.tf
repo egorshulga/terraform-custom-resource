@@ -1,14 +1,22 @@
+locals {
+  appService        = provider::azurerm::parse_resource_id(var.appService.id)
+  resourceGroupName = local.appService.resource_group_name
+  appServiceName    = local.appService.resource_name
+}
+
 resource "terraform_data" "appSettings" {
   triggers_replace = {
-    subscriptionId = var.subscriptionId
-    appService     = var.appService
-    appSettings    = var.appSettings
+    subscriptionId        = var.subscriptionId
+    resourceGroupName     = local.resourceGroupName
+    appServiceName        = local.appServiceName
+    appSettings           = var.appSettings
+    driftDetectionTrigger = value_replaced_when.driftDetected.value
   }
 
   input = {
     subscriptionId    = var.subscriptionId
-    resourceGroupName = var.appService.resource_group_name
-    appServiceName    = var.appService.name
+    resourceGroupName = local.resourceGroupName
+    appServiceName    = local.appServiceName
     appSettings       = jsonencode(var.appSettings)
   }
 
